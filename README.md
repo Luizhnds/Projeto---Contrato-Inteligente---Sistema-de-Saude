@@ -1,6 +1,6 @@
 # SistemaSaude - Contrato Inteligente 
 
-- Este é um contrato inteligente desenvolvido em **Solidity** para inserir e buscar dados de pacientes, médicos, locais de atendimento e consultas.  
+- Este é um contrato inteligente desenvolvido na linguagem Solidity para inserir e buscar dados de pacientes, médicos, locais de atendimento e consultas.  
 - O sistema funciona como uma base de dados imutável e auditável, adequada para registro distribuído usando a rede Ethereum (Blockchain).
 - Solidity 0.8.30.
 - Remix IDE (REMIX VM - London) para deploy do contrato inteligente e testagem.
