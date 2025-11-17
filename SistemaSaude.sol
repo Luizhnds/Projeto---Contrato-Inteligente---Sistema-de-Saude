@@ -11,6 +11,7 @@ contract SistemaSaude {
         require(msg.sender == owner, "Apenas o administrador pode realizar esta operacao");
         _;
     }
+
     //Structs
     struct Medico {
         uint crm;
@@ -31,6 +32,7 @@ contract SistemaSaude {
         string cidade;
         string estado;
     }
+
     struct Consulta {
         uint idConsulta;
         uint cpfPaciente;
@@ -48,16 +50,25 @@ contract SistemaSaude {
     mapping(uint => Consulta) private consultas;
     uint[] private idsConsultas;
 
-    //Inserções no sistema (médico, paciente, local e consulta)
-    function cadastrarMedico(uint crm, string memory nome, string memory esp) public onlyOwner{
+    //Funções de inserções no sistema (médico, paciente, local e consulta)
+    function cadastrarMedico(uint crm, string memory nome, string memory esp) public onlyOwner {
+        require(crm != 0, "CRM invalido");
+        require(medicos[crm].crm == 0, "CRM ja cadastrado");
         medicos[crm] = Medico(crm, nome, esp);
     }
-    function cadastrarPaciente(uint cpf, string memory nome, uint idade, string memory nasc) public onlyOwner{
+
+    function cadastrarPaciente(uint cpf, string memory nome, uint idade, string memory nasc) public onlyOwner {
+        require(cpf != 0, "CPF invalido");
+        require(pacientes[cpf].cpf == 0, "CPF ja cadastrado");
         pacientes[cpf] = Paciente(cpf, nome, idade, nasc);
     }
-    function cadastrarLocal(uint idLocal, string memory ender, string memory cid, string memory uf) public onlyOwner{
+
+    function cadastrarLocal(uint idLocal, string memory ender, string memory cid, string memory uf) public onlyOwner {
+        require(idLocal != 0, "ID de local invalido");
+        require(locais[idLocal].idLocal == 0, "ID do local ja cadastrado");
         locais[idLocal] = LocalAtendimento(idLocal, ender, cid, uf);
     }
+
     function registrarConsulta(
         uint idConsulta,
         uint cpf,
@@ -66,10 +77,15 @@ contract SistemaSaude {
         string memory laudo,
         string memory medicamento,
         string memory dataConsulta
-    ) public onlyOwner{
+    ) public onlyOwner {
+
+        require(idConsulta != 0, "ID da consulta invalido");
+        require(consultas[idConsulta].idConsulta == 0, "ID da consulta ja cadastrado");
+
         require(pacientes[cpf].cpf != 0, "Paciente nao encontrado");
         require(medicos[crm].crm != 0, "Medico nao encontrado");
         require(locais[idLocal].idLocal != 0, "Local nao encontrado");
+
         consultas[idConsulta] = Consulta(
             idConsulta,
             cpf,
@@ -79,10 +95,11 @@ contract SistemaSaude {
             medicamento,
             dataConsulta
         );
+
         idsConsultas.push(idConsulta);
     }
 
-    //Buscas no sistema (médico, paciente, local e consulta)
+    //Funções de buscas no sistema (médico, paciente, local e consulta)
     function getMedico(uint crm) public view returns (
             uint _crm,
             string memory _nome,
@@ -152,8 +169,8 @@ contract SistemaSaude {
         );
     }
 
-    //Listagem dos IDs das consultas
-    function listarIdsConsultas() public view returns (uint[] memory){
+    //Lista de todos os IDs das consultas
+    function listarIdsConsultas() public view returns (uint[] memory) {
         require(idsConsultas.length > 0, "Nenhuma consulta cadastrada");
         return idsConsultas;
     }
