@@ -153,11 +153,7 @@ contract SistemaSaude {
     }
 
     //Listagem dos IDs das consultas
-    function listarIdsConsultas()
-        public
-        view
-        returns (uint[] memory)
-    {
+    function listarIdsConsultas() public view returns (uint[] memory){
         require(idsConsultas.length > 0, "Nenhuma consulta cadastrada");
         return idsConsultas;
     }
